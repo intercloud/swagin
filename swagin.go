@@ -178,18 +178,19 @@ func (g *SwaGin) fullPath(path string) string {
 	return g.rootPath + path
 }
 func (g *SwaGin) Run(addr ...string) error {
-	g.init()
-	for _, s := range g.subApps {
-		s.init()
-	}
+	g.BuildRoutes()
 	return g.Engine.Run(addr...)
 }
 
-func (g *SwaGin) StartGraceful(addr ...string) (*http.Server, error) {
+func (g *SwaGin) BuildRoutes() {
 	g.init()
 	for _, s := range g.subApps {
 		s.init()
 	}
+}
+
+func (g *SwaGin) StartGraceful(addr ...string) (*http.Server, error) {
+	g.BuildRoutes()
 	var address string
 	if len(addr) == 0 {
 		address = ":" + os.Getenv("PORT")
